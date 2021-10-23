@@ -150,8 +150,7 @@ def get_image(folders: List[str], team_color: str, texture: WarCraft3Texture, te
     else:
         image_file = texture.image_file_name
 
-    if image_file.endswith(".blp"):
-        image_file = image_file.split(".blp")[0] + texture_exc
+    image_file = image_file.split(".")[0] + texture_exc
 
     image_file = image_file.replace("/", os.path.sep)
     image_file = image_file.replace("\\", os.path.sep)
