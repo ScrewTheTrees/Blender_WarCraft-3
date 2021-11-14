@@ -41,11 +41,11 @@ def create_mesh_objects(model: WarCraft3Model, bpy_materials: List[Material]):
             #     bpy_object.vertex_groups.get(str(skin_weight[3])).add([vertex_index, ], skin_weight[7]/255.0, 'REPLACE')
 
             # RMS had a bug which filled some list with -1 resulting in them being filled with 255 in the saved models
-            if sum(skin_weight[4:]) > 300:
-                for i in range(0, 5):
-                    sw = skin_weight[i + 4]
-                    if sw != 0:
-                        bpy_object.vertex_groups.get(str(skin_weight[i])).add([vertex_index, ], sw / 255.0, 'REPLACE')
+            if sum(skin_weight[4:]) > 255:
+                print("Potentially invalid skin weight data")
+            for i in range(0, 4):
+                if skin_weight[i] != 255 and skin_weight[i + 4] != 0:
+                    bpy_object.vertex_groups.get(str(skin_weight[i])).add([vertex_index, ], skin_weight[i + 4] / 255.0, 'REPLACE')
 
             # if skin_weight[4] != 0:
             #     bpy_object.vertex_groups.get(str(skin_weight[0])).add([vertex_index, ], skin_weight[4]/255.0, 'REPLACE')
