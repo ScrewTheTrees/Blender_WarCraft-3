@@ -99,7 +99,11 @@ def parse_geometry(data, version):
             chunk_id = r.getid((constants.CHUNK_SKIN, constants.CHUNK_TEXTURE_VERTEX_GROUP))
         if chunk_id == constants.CHUNK_SKIN:
             skin_size = r.getf('<I')[0]
-            r.skip(skin_size)
+            skin_weights = []
+            for i in range(skin_size):
+                skin_weights.append(r.getf('<B')[0])
+            for i in (range(int(skin_size/8))):
+                mesh.skin_weights.append(skin_weights[i*8:i*8+8])
             chunk_id = r.getid(constants.CHUNK_TEXTURE_VERTEX_GROUP)
     else:
         chunk_id = r.getid(constants.CHUNK_TEXTURE_VERTEX_GROUP)
