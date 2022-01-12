@@ -1,4 +1,5 @@
 import re
+import typing
 
 
 class Reader:
@@ -12,14 +13,14 @@ class Reader:
     def parse(self, context):
         pass
 
-    def read(self, bracket_count):
-        line = self.file.readline().replace(",", "").strip()
+    def read(self, bracket_count: int):
+        line: str = self.file.readline().replace(",", "").strip()
         bracket_count = count_brackets(bracket_count, line)
         return line, bracket_count
 
 
-def chunkifier(chunk_to_split):
-    chunks = []
+def chunkifier(chunk_to_split: str) -> typing.List[str]:
+    chunks: typing.List[str] = []
     last_bracket = chunk_to_split.rfind('}')
     split_start = 0
 
@@ -35,7 +36,7 @@ def chunkifier(chunk_to_split):
     return chunks
 
 
-def extract_bracket_content(stuff):
+def extract_bracket_content(stuff: str) -> str:
     # print("extract_bracket_content")
     split_start = stuff.find("{")+1
     # bracket_count = 1
@@ -54,13 +55,13 @@ def extract_bracket_content(stuff):
     return stuff[split_start:end_bracket_index].strip()
 
 
-def count_brackets2(line):
+def count_brackets2(line: str) -> int:
     start_brackets = line.count('{')
     end_brackets = line.count('}')
     return start_brackets - end_brackets
 
 
-def count_brackets(bracket_count, line):
+def count_brackets(bracket_count: int, line: str) -> int:
     start_brackets = line.count('{')
     end_brackets = line.count('}')
     bracket_count += start_brackets
@@ -68,7 +69,7 @@ def count_brackets(bracket_count, line):
     return bracket_count
 
 
-def get_between(line, start, end):
+def get_between(line: str, start: str, end: str) -> str:
     start_point = line.find(start)
     # print(start_point)
     end_point = line.find(end, start_point)
@@ -80,7 +81,7 @@ def get_between(line, start, end):
     return thing
 
 
-def extract_float_values(line):
+def extract_float_values(line: str) -> typing.List[float]:
     # print("exact float from \"" + line + "\"")
     no_bracket_line = extract_bracket_content(line).strip(',')
     if no_bracket_line == '':
@@ -97,7 +98,7 @@ def extract_float_values(line):
     return line_values
 
 
-def extract_int_values(line):
+def extract_int_values(line: str) -> typing.List[int]:
     no_bracket_line = extract_bracket_content(line).strip(',')
     if no_bracket_line == '':
         no_bracket_line = line.strip(',')

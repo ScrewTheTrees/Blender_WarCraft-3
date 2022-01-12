@@ -1,10 +1,12 @@
+from typing import Union
+
 from ..classes.WarCraft3Helper import WarCraft3Helper
 from . import binary_reader
 from .parse_node import parse_node
 from ..classes.WarCraft3Model import WarCraft3Model
 
 
-def parse_helpers(data, model: WarCraft3Model):
+def parse_helpers(data: bytes, model: WarCraft3Model):
     data_size = len(data)
     r = binary_reader.Reader(data)
 

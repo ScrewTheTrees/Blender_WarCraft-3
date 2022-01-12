@@ -8,11 +8,11 @@ if "MDXImportProperties" in locals():
         WarCraft3CollisionShape,
         WarCraft3Event,
         WarCraft3GeosetAnimation,
-        WarCraft3GeosetTransformation,
+        WarCraft3Transformation,
         WarCraft3Helper,
         WarCraft3Layer,
         WarCraft3Material,
-        WarCraft3Mesh,
+        WarCraft3Geoset,
         WarCraft3Model,
         WarCraft3Node,
         WarCraft3Sequence,
@@ -23,11 +23,11 @@ if "MDXImportProperties" in locals():
     importlib.reload(WarCraft3CollisionShape)
     importlib.reload(WarCraft3Event)
     importlib.reload(WarCraft3GeosetAnimation)
-    importlib.reload(WarCraft3GeosetTransformation)
+    importlib.reload(WarCraft3Transformation)
     importlib.reload(WarCraft3Helper)
     importlib.reload(WarCraft3Layer)
     importlib.reload(WarCraft3Material)
-    importlib.reload(WarCraft3Mesh)
+    importlib.reload(WarCraft3Geoset)
     importlib.reload(WarCraft3Model)
     importlib.reload(WarCraft3Node)
     importlib.reload(WarCraft3Sequence)

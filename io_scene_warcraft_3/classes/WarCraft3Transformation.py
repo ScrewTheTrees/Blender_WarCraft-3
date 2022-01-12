@@ -1,4 +1,4 @@
-class WarCraft3GeosetTransformation:
+class WarCraft3Transformation:
     def __init__(self):
         self.tracks_count = None
         self.interpolation_type = None

@@ -1,9 +1,9 @@
-from ..classes.WarCraft3GeosetTransformation import WarCraft3GeosetTransformation
+from ..classes.WarCraft3Transformation import WarCraft3Transformation
 from .. import constants
 
 
 def parse_geoset_alpha(r):
-    alpha = WarCraft3GeosetTransformation()
+    alpha = WarCraft3Transformation()
     alpha.tracks_count = r.getf('<I')[0]
     alpha.interpolation_type = r.getf('<I')[0]
     global_sequence_id = r.getf('<I')[0]

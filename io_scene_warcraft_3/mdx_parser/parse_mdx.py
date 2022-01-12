@@ -18,7 +18,7 @@ from .parse_textures import parse_textures
 from .parse_version import parse_version
 
 
-def parse_mdx(data, import_properties: MDXImportProperties):
+def parse_mdx(data: bytes, import_properties: MDXImportProperties):
     data_size = len(data)
     r = binary_reader.Reader(data)
     r.getid(constants.CHUNK_MDX_MODEL)
@@ -28,7 +28,7 @@ def parse_mdx(data, import_properties: MDXImportProperties):
     while r.offset < data_size:
         chunk_id = r.getid(constants.SUB_CHUNKS_MDX_MODEL, debug=True)
         chunk_size = r.getf('<I')[0]
-        chunk_data = data[r.offset: r.offset + chunk_size]
+        chunk_data: bytes = data[r.offset: r.offset + chunk_size]
         r.skip(chunk_size)
 
         if chunk_id == constants.CHUNK_VERSION:

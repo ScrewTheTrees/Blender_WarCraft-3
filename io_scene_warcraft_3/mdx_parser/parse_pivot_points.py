@@ -2,7 +2,7 @@ from . import binary_reader
 from ..classes.WarCraft3Model import WarCraft3Model
 
 
-def parse_pivot_points(data, model: WarCraft3Model):
+def parse_pivot_points(data: bytes, model: WarCraft3Model):
     data_size = len(data)
     r = binary_reader.Reader(data)
 

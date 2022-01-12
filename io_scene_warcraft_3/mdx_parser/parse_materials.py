@@ -5,7 +5,7 @@ from .. import constants
 from ..classes.WarCraft3Model import WarCraft3Model
 
 
-def parse_materials(data, model: WarCraft3Model):
+def parse_materials(data: bytes, model: WarCraft3Model):
     r = binary_reader.Reader(data)
     data_size = len(data)
 
@@ -25,7 +25,7 @@ def parse_materials(data, model: WarCraft3Model):
             layer_chunk_data_size = inclusive_size - 12
 
         if layer_chunk_data_size > 0:
-            layer_chunk_data = data[r.offset: r.offset + layer_chunk_data_size]
+            layer_chunk_data: bytes = data[r.offset: r.offset + layer_chunk_data_size]
             r.skip(layer_chunk_data_size)
             material.layers = parse_layers(layer_chunk_data, model.version)
 

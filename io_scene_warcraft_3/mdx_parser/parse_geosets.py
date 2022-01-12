@@ -3,7 +3,7 @@ from .parse_geometry import parse_geometry
 from ..classes.WarCraft3Model import WarCraft3Model
 
 
-def parse_geosets(data, model: WarCraft3Model):
+def parse_geosets(data: bytes, model: WarCraft3Model):
     data_size = len(data)
     r = binary_reader.Reader(data)
 
@@ -13,4 +13,4 @@ def parse_geosets(data, model: WarCraft3Model):
         geo_data = data[r.offset : r.offset + geo_data_size]
         r.skip(geo_data_size)
         mesh = parse_geometry(geo_data, model.version)
-        model.meshes.append(mesh)
+        model.geosets.append(mesh)

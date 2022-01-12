@@ -1,13 +1,15 @@
-from ..classes.WarCraft3Mesh import WarCraft3Mesh
+import typing
+
+from ..classes.WarCraft3Geoset import WarCraft3Geoset
 from .mdl_reader import chunkifier, extract_bracket_content, extract_float_values, extract_int_values
 
 from .get_vertex_groups import get_vertex_groups
 
 
-def parse_geometry(geoset_chunks):
+def parse_geometry(geoset_chunks: typing.List[str]):
     print("parse_geometry")
-    mesh = WarCraft3Mesh()
-    mesh.name = 'temp'
+    geoset = WarCraft3Geoset()
+    geoset.name = 'temp'
 
     matrix_indices = []
     matrix_groups_sizes = []
@@ -20,7 +22,7 @@ def parse_geometry(geoset_chunks):
             verts = chunkifier(extract_bracket_content(data_chunk))
 
             for vert in verts:
-                mesh.vertices.append(extract_float_values(vert))
+                geoset.vertices.append(extract_float_values(vert))
 
         if label == "Faces":
             triangles = chunkifier(extract_bracket_content(extract_bracket_content(data_chunk)))
@@ -29,11 +31,11 @@ def parse_geometry(geoset_chunks):
                 triangle_values = extract_float_values(triangle)
 
                 if len(triangle_values) == 3:
-                    mesh.triangles.append(triangle_values)
+                    geoset.triangles.append(triangle_values)
 
                 else:
                     for i in range(len(triangle_values)//3):
-                        mesh.triangles.append(triangle_values[i*3:i*3+3])
+                        geoset.triangles.append(triangle_values[i*3:i*3+3])
 
         if label == "VertexGroup":
             vert_groups = extract_int_values(data_chunk)
@@ -54,16 +56,16 @@ def parse_geometry(geoset_chunks):
 
             for t_vertice in t_vertices:
                 u, v = extract_float_values(t_vertice)
-                mesh.uvs.append((u, 1 - v))
+                geoset.uvs.append((u, 1 - v))
 
         if label == "SkinWeights":
             weights = chunkifier(extract_bracket_content(data_chunk))
 
             for weight in weights:
-                mesh.skin_weights.append(extract_int_values(weight))
+                geoset.skin_weights.append(extract_int_values(weight))
 
     vertex_groups, vertex_groups_ids = get_vertex_groups(matrix_groups, matrix_groups_sizes, matrix_indices)
-    mesh.vertex_groups = vertex_groups
-    mesh.vertex_groups_ids = vertex_groups_ids
+    geoset.vertex_groups = vertex_groups
+    geoset.vertex_groups_ids = vertex_groups_ids
 
-    return mesh
+    return geoset

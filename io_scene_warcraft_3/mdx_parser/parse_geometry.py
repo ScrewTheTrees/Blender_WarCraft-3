@@ -1,4 +1,4 @@
-from ..classes.WarCraft3Mesh import WarCraft3Mesh
+from ..classes.WarCraft3Geoset import WarCraft3Geoset
 from .binary_reader import Reader
 from .. import constants
 from .get_vertex_groups import get_vertex_groups
@@ -6,8 +6,8 @@ from .get_vertex_groups import get_vertex_groups
 
 def parse_geometry(data, version):
     r = Reader(data)
-    mesh = WarCraft3Mesh()
-    mesh.name = 'temp'
+    geoset = WarCraft3Geoset()
+    geoset.name = 'temp'
 
     # parse vertices
     chunk_id = r.getid(constants.CHUNK_VERTEX_POSITION)
@@ -18,7 +18,7 @@ def parse_geometry(data, version):
     for _ in range(vertex_count):
         vertex_position_x, vertex_position_y, vertex_position_z = r.getf('<3f')
         # print(vertex_position_x, ", ", vertex_position_y, ", ", vertex_position_z)
-        mesh.vertices.append((vertex_position_x, vertex_position_y, vertex_position_z))
+        geoset.vertices.append((vertex_position_x, vertex_position_y, vertex_position_z))
 
     # Read and ignore
     chunks_to_skip = [[constants.CHUNK_VERTEX_NORMAL, '<3f'], [constants.CHUNK_FACE_TYPE_GROUP, '<I'], [constants.CHUNK_FACE_GROUP, '<I']]
@@ -38,7 +38,7 @@ def parse_geometry(data, version):
 
     for _ in range(indices_count // 3):
         vertex_index1, vertex_index2, vertex_index3 = r.getf('<3H')
-        mesh.triangles.append((vertex_index1, vertex_index2, vertex_index3))
+        geoset.triangles.append((vertex_index1, vertex_index2, vertex_index3))
 
     # parse vertex groups
     chunk_id = r.getid(constants.CHUNK_VERTEX_GROUP)
@@ -69,9 +69,9 @@ def parse_geometry(data, version):
 
     # parse vertex groups
     vertex_groups, vertex_groups_ids = get_vertex_groups(matrix_groups, matrix_groups_sizes, matrix_indices)
-    mesh.vertex_groups = vertex_groups
-    mesh.vertex_groups_ids = vertex_groups_ids
-    mesh.material_id = r.getf('<I')[0]
+    geoset.vertex_groups = vertex_groups
+    geoset.vertex_groups_ids = vertex_groups_ids
+    geoset.material_id = r.getf('<I')[0]
     selection_group = r.getf('<I')[0]
     selection_flags = r.getf('<I')[0]
 
@@ -115,6 +115,6 @@ def parse_geometry(data, version):
 
     for _ in range(vertex_texture_position_count):
         u, v = r.getf('<2f')
-        mesh.uvs.append((u, 1 - v))
+        geoset.uvs.append((u, 1 - v))
 
-    return mesh
+    return geoset

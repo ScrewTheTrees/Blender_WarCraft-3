@@ -1,9 +1,9 @@
-from ..classes.WarCraft3GeosetTransformation import WarCraft3GeosetTransformation
+from ..classes.WarCraft3Transformation import WarCraft3Transformation
 from .. import constants
 
 
 def parse_fresnel_color(r):
-    fresnel_color = WarCraft3GeosetTransformation()
+    fresnel_color = WarCraft3Transformation()
     fresnel_color.tracks_count = r.getf('<I')[0]
     fresnel_color.interpolation_type = r.getf('<I')[0]
     global_sequence_id = r.getf('<I')[0]

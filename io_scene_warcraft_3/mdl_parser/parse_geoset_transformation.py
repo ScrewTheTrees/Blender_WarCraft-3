@@ -1,11 +1,11 @@
 import re
-from ..classes.WarCraft3GeosetTransformation import WarCraft3GeosetTransformation
+from ..classes.WarCraft3Transformation import WarCraft3Transformation
 from .. import constants
 from .mdl_reader import extract_bracket_content, extract_float_values, chunkifier
 
 
 def parse_geoset_transformation(node_chunk):
-    transformation = WarCraft3GeosetTransformation()
+    transformation = WarCraft3Transformation()
     transformation.tracks_count = int(node_chunk.split(" ")[1])
 
     transformation_chunk = extract_bracket_content(node_chunk)

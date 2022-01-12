@@ -1,17 +1,18 @@
 import struct
+from typing import Tuple
 
 
 class Reader:
-    def __init__(self, data):
-        self.__data = data
+    def __init__(self, data: bytes):
+        self.__data: bytes = data
         self.offset = 0
 
-    def getf(self, value_format):
+    def getf(self, value_format: str) -> Tuple:
         size = struct.calcsize(value_format)
         self.offset += size
         return struct.unpack_from(value_format, self.__data, self.offset - size)
 
-    def gets(self, size):
+    def gets(self, size: int) -> Tuple:
         self.offset += size
         return struct.unpack_from('<{}s'.format(size), self.__data, self.offset - size)[0].split(b'\x00')[0].decode(encoding='mbcs')
 
@@ -28,5 +29,5 @@ class Reader:
         else:
             return chunk_id
 
-    def skip(self, count):
+    def skip(self, count: int):
         self.offset += count
