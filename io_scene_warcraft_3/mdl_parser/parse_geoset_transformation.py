@@ -4,7 +4,7 @@ from .. import constants
 from .mdl_reader import extract_bracket_content, extract_float_values, chunkifier
 
 
-def parse_geoset_transformation(node_chunk):
+def parse_geoset_transformation(node_chunk: str) -> WarCraft3Transformation:
     transformation = WarCraft3Transformation()
     transformation.tracks_count = int(node_chunk.split(" ")[1])
 

@@ -1,12 +1,14 @@
-from ..classes.WarCraft3Model import WarCraft3Model
+from typing import List
+
 from ..classes.WarCraft3Sequence import WarCraft3Sequence
 from .mdl_reader import extract_bracket_content, chunkifier
 
 
-def parse_sequences(data: str, model: WarCraft3Model):
+def parse_sequences(data: str) -> List[WarCraft3Sequence]:
     sequences_string = extract_bracket_content(data)
     sequence_chunks = chunkifier(sequences_string)
 
+    sequences: List[WarCraft3Sequence] = []
     for sequence_chunk in sequence_chunks:
         sequence = WarCraft3Sequence()
         sequence.name = sequence_chunk.strip().split("\"")[1]
@@ -40,4 +42,5 @@ def parse_sequences(data: str, model: WarCraft3Model):
             if label == "Rarity":
                 rarity = float(info.strip().replace(",", "").split(" ")[1])
 
-        model.sequences.append(sequence)
+        sequences.append(sequence)
+    return sequences

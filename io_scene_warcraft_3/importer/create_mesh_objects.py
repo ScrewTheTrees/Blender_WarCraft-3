@@ -8,7 +8,7 @@ from io_scene_warcraft_3.classes.WarCraft3Model import WarCraft3Model
 
 def create_mesh_objects(model: WarCraft3Model, bpy_materials: List[Material]):
     print("creating mesh")
-    bpy_objects = []
+    bpy_mesh_objects = []
 
     for warCraft3Geoset in model.geosets:
         bpy_mesh = bpy.data.meshes.new(warCraft3Geoset.name)
@@ -60,7 +60,7 @@ def create_mesh_objects(model: WarCraft3Model, bpy_materials: List[Material]):
             for vertexGroupId in vertexGroupIds:
                 bpy_object.vertex_groups.get(str(vertexGroupId)).add([vertex_index, ], 1.0, 'REPLACE')
 
-        bpy_objects.append(bpy_object)
-    return bpy_objects
+        bpy_mesh_objects.append(bpy_object)
+    return bpy_mesh_objects
 
 

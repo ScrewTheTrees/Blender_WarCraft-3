@@ -1,4 +1,8 @@
-def get_vertex_groups(matrix_groups, matrix_groups_sizes, matrix_indices):
+from typing import List, Tuple
+
+
+def get_vertex_groups(matrix_groups: List[int], matrix_groups_sizes: List[int], matrix_indices: List[int])\
+        -> Tuple[List[List[int]], List[int]]:
     i = 0
     matrix = []
 
@@ -6,7 +10,7 @@ def get_vertex_groups(matrix_groups, matrix_groups_sizes, matrix_indices):
         matrix.append(matrix_indices[i: i + matrixGroupSize])
         i += matrixGroupSize
 
-    vertex_groups = []
+    vertex_groups: List[List[int]] = []
     vertex_groups_ids = set()
 
     for matrixGroup in matrix_groups:

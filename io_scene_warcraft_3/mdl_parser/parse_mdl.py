@@ -17,7 +17,7 @@ from .parse_textures import parse_textures
 from .parse_version import parse_version
 
 
-def parse_mdl(data, import_properties: MDXImportProperties):
+def parse_mdl(data: str, import_properties: MDXImportProperties):
     reader = Reader(data)
     model = WarCraft3Model()
     model.file = import_properties.mdx_file_path
@@ -27,31 +27,31 @@ def parse_mdl(data, import_properties: MDXImportProperties):
         label = chunk.split(" ", 1)[0]
         # print(label)
         if label == "Version":
-            parse_version(chunk, model)
+            model.version = parse_version(chunk)
         elif label == "Geoset":
-            parse_geosets(chunk, model)
+            model.geosets.append(parse_geosets(chunk))
         elif label == "Textures":
-            parse_textures(chunk, model)
+            model.textures.extend(parse_textures(chunk))
         elif label == "Materials":
-            parse_materials(chunk, model)
+            model.materials.extend(parse_materials(chunk))
         elif label == "Model":
-            parse_model(chunk, model)
+            model.name = parse_model(chunk)
         elif label == "Bone":
-            parse_bones(chunk, model)
+            model.nodes.append(parse_bones(chunk))
         elif label == "PivotPoints":
-            parse_pivot_points(chunk, model)
+            model.pivot_points.extend(parse_pivot_points(chunk))
         elif label == "Helper":
-            parse_helpers(chunk, model)
+            model.nodes.append(parse_helpers(chunk))
         elif label == "Attachment":
-            parse_attachments(chunk, model)
+            model.nodes.append(parse_attachments(chunk))
         elif label == "EventObject":
-            parse_events(chunk, model)
+            model.nodes.append(parse_events(chunk))
         elif label == "CollisionShape":
-            parse_collision_shapes(chunk, model)
+            model.nodes.append(parse_collision_shapes(chunk))
         elif label == "Sequences":
-            parse_sequences(chunk, model)
+            model.sequences.extend(parse_sequences(chunk))
         elif label == "GeosetAnim":
-            parse_geoset_animations(chunk, model)
+            model.geoset_animations.append(parse_geoset_animations(chunk))
         elif label == "ParticleEmitter2":
             print("Particles not implemented yet")
         elif label == "TextureAnims":
@@ -80,54 +80,54 @@ def parse_mdl2(data):
         # print("label: ", label)
         if label == "Version":
             print("parse: Version")
-            parse_version(chunk, model)
+            model.version = parse_version(chunk)
 
         elif label == "Geoset":
             print("parse: Geoset")
-            parse_geosets(chunk, model)
+            model.geosets.append(parse_geosets(chunk))
 
         elif label == "Textures":
             print("parse: Textures")
-            parse_textures(chunk, model)
+            model.textures.extend(parse_textures(chunk))
 
         elif label == "Materials":
             print("parse: Materials")
-            parse_materials(chunk, model)
+            model.materials.extend(parse_materials(chunk))
 
         elif label == "Model":
             print("parse: Model")
-            parse_model(chunk, model)
+            model.name = parse_model(chunk)
 
         elif label == "Bone":
             # print("parse: Bone")
-            parse_bones(chunk, model)
+            model.nodes.append(parse_bones(chunk))
 
         elif label == "PivotPoints":
             print("parse: PivotPoints")
-            parse_pivot_points(chunk, model)
+            model.pivot_points.extend(parse_pivot_points(chunk))
 
         elif label == "Helper":
             # print("parse: Helper")
-            parse_helpers(chunk, model)
+            model.nodes.append(parse_helpers(chunk))
 
         elif label == "Attachment":
             # print("parse: Attachment")
-            parse_attachments(chunk, model)
+            model.nodes.append(parse_attachments(chunk))
 
         elif label == "EventObject":
             # print("parse: EventObject")
-            parse_events(chunk, model)
+            model.nodes.append(parse_events(chunk))
 
         elif label == "CollisionShape":
             # print("parse: CollisionShape")
-            parse_collision_shapes(chunk, model)
+            model.nodes.append(parse_collision_shapes(chunk))
 
         elif label == "Sequences":
             print("parse: Sequences")
-            parse_sequences(chunk, model)
+            model.sequences.extend(parse_sequences(chunk))
 
         elif label == "GeosetAnim":
             print("parse: GeosetAnim")
-            parse_geoset_animations(chunk, model)
+            model.geoset_animations.append(parse_geoset_animations(chunk))
 
     importer.load_warcraft_3_model2(model)

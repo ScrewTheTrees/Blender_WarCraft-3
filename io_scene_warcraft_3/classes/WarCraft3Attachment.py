@@ -1,4 +1,6 @@
-class WarCraft3Attachment:
+from io_scene_warcraft_3.classes.WarCraft3Node import WarCraft3Node
+
+
+class WarCraft3Attachment(WarCraft3Node):
     def __init__(self):
-        self.type = 'attachment'
-        self.node = None
+        super().__init__('attachment')

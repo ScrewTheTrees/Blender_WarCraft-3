@@ -1,9 +1,11 @@
+from typing import List
+
 from ..classes.WarCraft3Model import WarCraft3Model
 from ..classes.WarCraft3Sequence import WarCraft3Sequence
 from . import binary_reader
 
 
-def parse_sequences(data: bytes, model: WarCraft3Model):
+def parse_sequences(data: bytes) -> List[WarCraft3Sequence]:
     r = binary_reader.Reader(data)
     data_size = len(data)
 
@@ -12,6 +14,7 @@ def parse_sequences(data: bytes, model: WarCraft3Model):
 
     sequence_count = data_size // 132
 
+    sequences: List[WarCraft3Sequence] = []
     for _ in range(sequence_count):
         sequence = WarCraft3Sequence()
         sequence.name = r.gets(80)
@@ -24,4 +27,5 @@ def parse_sequences(data: bytes, model: WarCraft3Model):
         bounds_radius = r.getf('<f')[0]
         minimum_extent = r.getf('<3f')
         maximum_extent = r.getf('<3f')
-        model.sequences.append(sequence)
+        sequences.append(sequence)
+    return sequences

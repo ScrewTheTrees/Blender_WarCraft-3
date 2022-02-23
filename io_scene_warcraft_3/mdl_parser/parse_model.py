@@ -1,9 +1,6 @@
-from io_scene_warcraft_3.classes.WarCraft3Model import WarCraft3Model
+def parse_model(data: str):
 
-
-def parse_model(data: str, model: WarCraft3Model):
-
-    model.name = data.split(" ")[1].replace("\"", "")
+    return data.split(" ")[1].replace("\"", "")
 
     # model_info = extract_bracket_content(data).split(",")
     #

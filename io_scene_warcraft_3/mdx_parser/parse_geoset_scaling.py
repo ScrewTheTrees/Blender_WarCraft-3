@@ -1,8 +1,9 @@
+from .binary_reader import Reader
 from ..classes.WarCraft3Transformation import WarCraft3Transformation
 from .. import constants
 
 
-def parse_geoset_scaling(r):
+def parse_geoset_scaling(r: Reader) -> WarCraft3Transformation:
     scaling = WarCraft3Transformation()
     scaling.tracks_count = r.getf('<I')[0]
     scaling.interpolation_type = r.getf('<I')[0]

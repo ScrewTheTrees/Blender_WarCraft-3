@@ -1,9 +1,13 @@
+from typing import Optional, List
+
 import bpy
 import mathutils
-from bpy.types import Object
+from bpy.types import Object, Action, FCurve, PoseBone
 
 from io_scene_warcraft_3 import constants
 from io_scene_warcraft_3.classes.WarCraft3Model import WarCraft3Model
+from io_scene_warcraft_3.classes.WarCraft3Node import WarCraft3Node
+from io_scene_warcraft_3.classes.WarCraft3Transformation import WarCraft3Transformation
 
 
 def create_armature_actions(armature_object: Object, model: WarCraft3Model, frame_time: float):
@@ -20,58 +24,66 @@ def create_armature_actions(armature_object: Object, model: WarCraft3Model, fram
     for node in nodes:
         add_unanimated_to_bones(action, node)
         add_unanimated_to_bones(action_all, node)
+        # bone: PoseBone = armature_object.pose.bones[node.name]
+        # armature_object.animation_data.
+        # bone.an
 
     for sequence in sequences:
         print("adding sequence " + sequence.name)
-        interval_start = sequence.interval_start
-        interval_end = sequence.interval_end
+        interval_start: int = sequence.interval_start
+        interval_end: int = sequence.interval_end
         action = bpy.data.actions.new(name=sequence.name)
         add_sequence_to_armature(sequence.name, armature_object)
 
-        int_start = round(interval_start / frame_time, 0)
-        int_end = round(interval_end / frame_time, 0)
+        int_start: int = round(interval_start / frame_time, None)
+        int_end: int = round(interval_end / frame_time, None)
 
         timeline_markers.new(sequence.name, frame=int_start)
         timeline_markers.new(sequence.name, frame=int_end)
 
         for node in nodes:
-            add_actions_to_bones(action, frame_time, 0, interval_end, interval_start, node, True)
-            add_actions_to_bones(action_all, frame_time, interval_start, interval_end, interval_start, node, False)
+            add_actions_to_node(action, frame_time, 0, interval_end, interval_start, node, True)
+            add_actions_to_node(action_all, frame_time, interval_start, interval_end, interval_start, node, False)
 
 
-def add_unanimated_to_bones(action, node):
-    bone_name = node.node.name
+def add_unanimated_to_bones(action: Action, node: WarCraft3Node):
+    bone_name = node.name
+
+    # armature_object.pose.bones[node.name]
     data_path = 'pose.bones["' + bone_name + '"]'
     new_fcurve(action, bone_name, data_path + '.location', 0.0)
     new_fcurve(action, bone_name, data_path + '.rotation_euler', 0.0)
     new_fcurve(action, bone_name, data_path + '.scale', 1.0)
 
 
-def add_actions_to_bones(action, frame_time, sequence_start, interval_end, interval_start, node, is_new_action):
-    bone_name = node.node.name
+def add_actions_to_node(action: Action, frame_time: float, sequence_start: int, interval_end: int, interval_start: int, node: WarCraft3Node, is_new_action: bool):
+    bone_name = node.name
     # dataPath = 'pose.bones["' + bone_name + '"]'
-    translations = node.node.translations
-    rotations = node.node.rotations
-    scalings = node.node.scalings
+    translations: Optional[WarCraft3Transformation] = node.translations
+    rotations: Optional[WarCraft3Transformation] = node.rotations
+    scalings: Optional[WarCraft3Transformation] = node.scalings
 
     if translations:
-        create_transformation_curves(action, bone_name, 'location', frame_time, interval_end, interval_start, sequence_start,
+        create_transformation_curves(action, bone_name, 'location',
+                                     frame_time, interval_end, interval_start, sequence_start,
                                      translations, 0.0,
                                      lambda translation: translation, is_new_action)
     if rotations:
-        create_transformation_curves(action, bone_name, 'rotation_euler', frame_time, interval_end, interval_start,
+        create_transformation_curves(action, bone_name, 'rotation_euler',
+                                     frame_time, interval_end, interval_start,
                                      sequence_start, rotations, 0.0,
                                      lambda rotation: (mathutils.Quaternion(mathutils.Vector(rotation)).to_euler('XYZ')), is_new_action)
 
     if scalings:
-        create_transformation_curves(action, bone_name, 'scale', frame_time, interval_end, interval_start, sequence_start,
+        create_transformation_curves(action, bone_name, 'scale',
+                                     frame_time, interval_end, interval_start, sequence_start,
                                      scalings, 1.0,
                                      lambda scaling: scaling, is_new_action)
 
 
-def create_transformation_curves(action, bone_name, data_path_addition, frame_time,
-                                 interval_end, interval_start, sequence_start,
-                                 transformations, transformation_zero_value, value_conversion, is_new_action):
+def create_transformation_curves(action: Action, bone_name: str, data_path_addition: str, frame_time,
+                                 interval_end: int, interval_start: int, sequence_start: int,
+                                 transformations: WarCraft3Transformation, transformation_zero_value, value_conversion, is_new_action: bool):
     data_path = 'pose.bones["' + bone_name + '"].' + data_path_addition
     starting_keyframe = round(sequence_start / frame_time, 0)
     interpolation_type = constants.INTERPOLATION_TYPE_NAMES[transformations.interpolation_type]
@@ -118,7 +130,7 @@ def create_transformation_curves(action, bone_name, data_path_addition, frame_ti
     set_new_curves(action, bone_name, data_path, transformation_fcurves, starting_keyframe, transformation_zero_value)
 
 
-def set_new_curves(action, bone_name, data_path, fcurves, starting_keyframe, value=-1.0):
+def set_new_curves(action: Action, bone_name: str, data_path: str, fcurves, starting_keyframe, value=-1.0):
     for i in range(len(fcurves)):
         if not fcurves[i]:
             fcurves[i] = action.fcurves.new(data_path, index=i, action_group=bone_name)
@@ -139,10 +151,13 @@ def insert_xyz_keyframe_points(interpolation_type, fcurves, real_time, movement)
         keyframe.interpolation = interpolation_type
 
 
-def new_fcurve(action, bone_name, data_path, value):
+def new_fcurve(action: Action, bone_name: str, data_path: str, value:float):
+    fcurves: List = []
     for i in range(3):
-        fcurve = action.fcurves.new(data_path, index=i, action_group=bone_name)
-        fcurve.keyframe_points.insert(0.0, value)
+        fcurve: FCurve = action.fcurves.new(data_path, index=i, action_group=bone_name)
+        fcurve.keyframe_points.insert(0, value)
+        fcurves.append(fcurve)
+    return fcurves
     # try:
     #     for i in range(3):
     #         fcurve = action.fcurves.new(data_path, index=i, action_group=bone_name)

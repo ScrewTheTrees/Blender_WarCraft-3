@@ -8,7 +8,7 @@ from ..classes.WarCraft3Transformation import WarCraft3Transformation
 from ..classes.WarCraft3Model import WarCraft3Model
 
 
-def parse_geoset_animations(data: str, model: WarCraft3Model):
+def parse_geoset_animations(data: str) -> WarCraft3GeosetAnimation:
     geoset_animation = WarCraft3GeosetAnimation()
     geoset_animation.geoset_id = 0
     geoset_id = get_between(data, "GeosetId", ",")
@@ -75,7 +75,7 @@ def parse_geoset_animations(data: str, model: WarCraft3Model):
         if not geoset_animation.animation_alpha:
             geoset_animation.animation_alpha = make_fake_animation(1)
 
-    model.geoset_animations.append(geoset_animation)
+    return geoset_animation
 
 
 def make_fake_animation(values):

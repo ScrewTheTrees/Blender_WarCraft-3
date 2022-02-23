@@ -1,16 +1,18 @@
 import re
+from typing import List
+
 from ..classes.WarCraft3Material import WarCraft3Material
 from ..classes.WarCraft3Layer import WarCraft3Layer
 from .parse_geoset_transformation import parse_geoset_transformation
 from .mdl_reader import extract_bracket_content, chunkifier, get_between
-from ..classes.WarCraft3Model import WarCraft3Model
 
 
-def parse_materials(data: str, model: WarCraft3Model):
+def parse_materials(data: str) -> List[WarCraft3Material]:
     # print("parse_materials")
     materials_string = extract_bracket_content(data)
     material_chunks = chunkifier(materials_string)
 
+    materials: List[WarCraft3Material] = []
     for material_chunk in material_chunks:
         material = WarCraft3Material()
         material_info = extract_bracket_content(material_chunk)
@@ -82,4 +84,5 @@ def parse_materials(data: str, model: WarCraft3Model):
             layers.append(layer)
 
         material.layers = layers
-        model.materials.append(material)
+        materials.append(material)
+    return materials

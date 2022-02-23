@@ -1,14 +1,20 @@
+from typing import List, Optional
+
+from io_scene_warcraft_3.classes.WarCraft3Vertex import WarCraft3Vertex
+
+
 class WarCraft3Geoset:
     def __init__(self):
         self.name = None
-        self.vertices: [float] = []
+        self.wc3_vertices: List[WarCraft3Vertex] = []
+        self.vertices: List[List[float]] = []
         self.normals: [float] = []
         self.triangles: [float] = []
         self.uvs = []
         self.material_id = 0
-        self.vertex_groups: [int] = []
-        self.vertex_groups_ids = None
-        self.skin_weights = []
+        self.vertex_groups: List[List[int]] = []
+        self.vertex_groups_ids: Optional[List[int]] = None
+        self.skin_weights: List[List[int]] = []
 
     # def get_save_string(self, settings):
     #     geoset_strings: [str] = ["Geoset {"]

@@ -1,9 +1,8 @@
 from ..classes.WarCraft3Event import WarCraft3Event
 from .parse_node import parse_node
-from ..classes.WarCraft3Model import WarCraft3Model
 
 
-def parse_events(data: str, model: WarCraft3Model):
+def parse_events(data: str) -> WarCraft3Event:
     event = WarCraft3Event()
-    event.node = parse_node(data)
-    model.nodes.append(event)
+    parse_node(data, event)
+    return event

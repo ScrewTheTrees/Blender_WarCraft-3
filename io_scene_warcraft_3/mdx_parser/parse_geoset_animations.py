@@ -1,3 +1,5 @@
+from typing import List
+
 from ..classes.WarCraft3GeosetAnimation import WarCraft3GeosetAnimation
 from ..classes.WarCraft3Transformation import WarCraft3Transformation
 from .. import constants
@@ -7,10 +9,11 @@ from .parse_geoset_color import parse_geoset_color
 from ..classes.WarCraft3Model import WarCraft3Model
 
 
-def parse_geoset_animations(data: bytes, model: WarCraft3Model):
+def parse_geoset_animations(data: bytes):
     r = binary_reader.Reader(data)
     data_size = len(data)
 
+    geoset_animations: List[WarCraft3GeosetAnimation] = []
     while r.offset < data_size:
         geoset_animation = WarCraft3GeosetAnimation()
         inclusive_size = r.offset + r.getf('<I')[0]
@@ -43,4 +46,5 @@ def parse_geoset_animations(data: bytes, model: WarCraft3Model):
             geoset_alpha.values = [alpha, ]
             geoset_animation.animation_alpha = geoset_alpha
 
-        model.geoset_animations.append(geoset_animation)
+        geoset_animations.append(geoset_animation)
+    return geoset_animations

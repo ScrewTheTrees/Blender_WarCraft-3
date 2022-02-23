@@ -4,7 +4,7 @@ from .. import constants
 from .get_vertex_groups import get_vertex_groups
 
 
-def parse_geometry(data, version):
+def parse_geometry(data: bytes, version: int) -> WarCraft3Geoset:
     r = Reader(data)
     geoset = WarCraft3Geoset()
     geoset.name = 'temp'
@@ -18,7 +18,7 @@ def parse_geometry(data, version):
     for _ in range(vertex_count):
         vertex_position_x, vertex_position_y, vertex_position_z = r.getf('<3f')
         # print(vertex_position_x, ", ", vertex_position_y, ", ", vertex_position_z)
-        geoset.vertices.append((vertex_position_x, vertex_position_y, vertex_position_z))
+        geoset.vertices.append([vertex_position_x, vertex_position_y, vertex_position_z])
 
     # Read and ignore
     chunks_to_skip = [[constants.CHUNK_VERTEX_NORMAL, '<3f'], [constants.CHUNK_FACE_TYPE_GROUP, '<I'], [constants.CHUNK_FACE_GROUP, '<I']]
@@ -103,7 +103,7 @@ def parse_geometry(data, version):
             for i in range(skin_size):
                 skin_weights.append(r.getf('<B')[0])
             for i in (range(int(skin_size/8))):
-                mesh.skin_weights.append(skin_weights[i*8:i*8+8])
+                skin_weights.append(skin_weights[i*8:i*8+8])
             chunk_id = r.getid(constants.CHUNK_TEXTURE_VERTEX_GROUP)
     else:
         chunk_id = r.getid(constants.CHUNK_TEXTURE_VERTEX_GROUP)

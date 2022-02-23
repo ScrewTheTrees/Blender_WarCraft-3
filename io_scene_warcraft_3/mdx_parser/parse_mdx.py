@@ -32,30 +32,30 @@ def parse_mdx(data: bytes, import_properties: MDXImportProperties):
         r.skip(chunk_size)
 
         if chunk_id == constants.CHUNK_VERSION:
-            parse_version(chunk_data, model)
+            model.version = parse_version(chunk_data)
         elif chunk_id == constants.CHUNK_GEOSET:
-            parse_geosets(chunk_data, model)
+            model.geosets.extend(parse_geosets(chunk_data, model.version))
         elif chunk_id == constants.CHUNK_TEXTURE:
-            parse_textures(chunk_data, model)
+            model.textures.extend(parse_textures(chunk_data))
         elif chunk_id == constants.CHUNK_MATERIAL:
-            parse_materials(chunk_data, model)
+            model.materials.extend(parse_materials(chunk_data, model.version))
         elif chunk_id == constants.CHUNK_MODEL:
-            parse_model(chunk_data, model)
+            model.name = parse_model(chunk_data)
         elif chunk_id == constants.CHUNK_BONE:
-            parse_bones(chunk_data, model)
+            model.nodes.extend(parse_bones(chunk_data))
         elif chunk_id == constants.CHUNK_PIVOT_POINT:
-            parse_pivot_points(chunk_data, model)
+            model.pivot_points.extend(parse_pivot_points(chunk_data))
         elif chunk_id == constants.CHUNK_HELPER:
-            parse_helpers(chunk_data, model)
+            model.nodes.extend(parse_helpers(chunk_data))
         elif chunk_id == constants.CHUNK_ATTACHMENT:
-            parse_attachments(chunk_data, model)
+            model.nodes.extend(parse_attachments(chunk_data))
         elif chunk_id == constants.CHUNK_EVENT_OBJECT:
-            parse_events(chunk_data, model)
+            model.nodes.extend(parse_events(chunk_data))
         elif chunk_id == constants.CHUNK_COLLISION_SHAPE:
-            parse_collision_shapes(chunk_data, model)
+            model.nodes.extend(parse_collision_shapes(chunk_data))
         elif chunk_id == constants.CHUNK_SEQUENCE:
-            parse_sequences(chunk_data, model)
+            model.sequences.extend(parse_sequences(chunk_data))
         elif chunk_id == constants.CHUNK_GEOSET_ANIMATION:
-            parse_geoset_animations(chunk_data, model)
+            model.geoset_animations.extend(parse_geoset_animations(chunk_data))
 
     importer.load_warcraft_3_model(model, import_properties)

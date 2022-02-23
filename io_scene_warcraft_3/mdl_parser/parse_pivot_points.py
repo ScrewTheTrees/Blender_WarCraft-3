@@ -1,9 +1,12 @@
+from typing import List
+
 from .mdl_reader import extract_bracket_content, extract_float_values, chunkifier
-from ..classes.WarCraft3Model import WarCraft3Model
 
 
-def parse_pivot_points(data: str, model: WarCraft3Model):
-    pivot_points = chunkifier(extract_bracket_content(data))
+def parse_pivot_points(data: str) -> List[List[float]]:
+    pivot_points_chunks = chunkifier(extract_bracket_content(data))
 
-    for pivot_point in pivot_points:
-        model.pivot_points.append(extract_float_values(pivot_point))
+    pivot_points: List[List[float]] = []
+    for pivot_point in pivot_points_chunks:
+        pivot_points.append(extract_float_values(pivot_point))
+    return pivot_points

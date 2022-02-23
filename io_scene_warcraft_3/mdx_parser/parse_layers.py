@@ -1,3 +1,5 @@
+from typing import List
+
 from ..classes.WarCraft3Layer import WarCraft3Layer
 from .. import constants
 from . import binary_reader
@@ -6,7 +8,7 @@ from .parse_material_texture_id import parse_material_texture_id
 from .parse_fresnel_color import parse_fresnel_color
 
 
-def parse_layers(data, version):
+def parse_layers(data: bytes, version: int) -> List[WarCraft3Layer]:
     r = binary_reader.Reader(data)
     chunk_id = r.getid(constants.CHUNK_LAYER)
     layers_count = r.getf('<I')[0]

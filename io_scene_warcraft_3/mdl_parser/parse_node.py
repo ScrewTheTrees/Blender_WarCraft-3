@@ -4,9 +4,8 @@ from .parse_geoset_transformation import parse_geoset_transformation
 from .mdl_reader import get_between, extract_bracket_content, chunkifier
 
 
-def parse_node(data):
+def parse_node(data: str, node: WarCraft3Node):
     # print("parse_node")
-    node = WarCraft3Node()
     node.name = data.split("\"")[1]
     node.id = 0
     if data.find("ObjectId") > -1:

@@ -6,14 +6,14 @@ from .mdl_reader import chunkifier, extract_bracket_content, extract_float_value
 from .get_vertex_groups import get_vertex_groups
 
 
-def parse_geometry(geoset_chunks: typing.List[str]):
+def parse_geometry(geoset_chunks: typing.List[str]) -> WarCraft3Geoset:
     print("parse_geometry")
     geoset = WarCraft3Geoset()
     geoset.name = 'temp'
 
     matrix_indices = []
     matrix_groups_sizes = []
-    matrix_groups = []
+    matrix_groups: typing.List[int] = []
 
     for data_chunk in geoset_chunks:
         label = data_chunk.split(" ", 1)[0]

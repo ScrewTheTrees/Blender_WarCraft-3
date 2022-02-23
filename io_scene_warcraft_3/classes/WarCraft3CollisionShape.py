@@ -1,4 +1,6 @@
-class WarCraft3CollisionShape:
+from io_scene_warcraft_3.classes.WarCraft3Node import WarCraft3Node
+
+
+class WarCraft3CollisionShape(WarCraft3Node):
     def __init__(self):
-        self.type = 'collision_shape'
-        self.node = None
+        super().__init__('collision_shape')
