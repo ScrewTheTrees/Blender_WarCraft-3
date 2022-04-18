@@ -103,7 +103,7 @@ def parse_geometry(data: bytes, version: int) -> WarCraft3Geoset:
             for i in range(skin_size):
                 skin_weights.append(r.getf('<B')[0])
             for i in (range(int(skin_size/8))):
-                skin_weights.append(skin_weights[i*8:i*8+8])
+                geoset.skin_weights.append(skin_weights[i*8:i*8+8])
             chunk_id = r.getid(constants.CHUNK_TEXTURE_VERTEX_GROUP)
     else:
         chunk_id = r.getid(constants.CHUNK_TEXTURE_VERTEX_GROUP)
